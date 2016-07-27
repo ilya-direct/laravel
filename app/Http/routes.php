@@ -11,56 +11,22 @@
 |
 */
 
-/*Route::get('/', function () {
-
-    return view('index', ['title' => 'Криптография']);
-});*/
-
-/*Route::get('/page/{id}', function ($id) {
-    return view('pages/' . $id, ['id' => $id]);
-});*/
-
 Route::get('/', 'SiteController@index');
 Route::get('/page/{id}', 'SiteController@showPage');
-
-Route::get('/item/{id}', function ($id) {
-    $item = App\Item::find($id);
-    print $item->name;
-    var_dump($item);
-});
-
-Route::get('/records', function () {
-
-    $records = App\Record::with('item')
-        ->orderBy('id', SORT_DESC)
-        ->limit(100)
-        ->get();
-    foreach ($records as $record) {
-        print $record->id . ' ' . $record->date . ' ' . $record->item->name . '<br>';
-    }
-});
-
-Route::get('/redis', function () {
-    $redis = app()->make('redis');
-    $redis->incr('lar');
-    print_r($redis->get('lar'));
-});
-
-
 
 
 // Authentication Routes...
 Route::group(['prefix' => 'admin'], function() {
-    Route::get('/login', 'AdminController@login');
-    $this->post('/login', 'Auth\AuthController@login');
+    Route::get('/login', 'Admin\SiteController@login');
+    Route::post('/login', 'Auth\AuthController@login');
     Route::group(['middleware' => 'auth'], function() {
-        Route::get('/', 'AdminController@home');
+        Route::get('/', 'Admin\SiteController@home');
         Route::get('logout', 'Auth\AuthController@logout');
-        Route::get('/stat', 'AdminController@stat');
-        Route::get('/stat/page/{id}', 'AdminController@pageBlocks')->where('id', '[0-9]+');;
-        Route::get('/stat/page/all', 'AdminController@pageBlocks');
-        Route::get('/stat/page/all/browsers', 'AdminController@allBrowserStat');
-        Route::get('/stat/page/{id}/browsers', 'AdminController@browserStat');
-        Route::get('/stat/page/{id}/oses', 'AdminController@osStat');
+        Route::get('/stat', 'Admin\StatController@stat');
+        Route::get('/stat/page/{id}', 'Admin\StatController@pageBlocks')->where('id', '[0-9]+');;
+        Route::get('/stat/page/all', 'Admin\StatController@pageBlocks');
+        Route::get('/stat/page/all/browsers', 'Admin\StatController@allBrowserStat');
+        Route::get('/stat/page/{id}/browsers', 'Admin\StatController@browserStat');
+        Route::get('/stat/page/{id}/oses', 'Admin\StatController@osStat');
     });
 });
