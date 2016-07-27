@@ -13,7 +13,7 @@ $breadcrumb[] = [
 $breadcrumb[] = ['label' => $title];
 
 ?>
-@extends('layouts.main')
+@extends('admin.layouts.main')
 @section('title', $title)
 @section('content')
     <h1>{{$page}}</h1>

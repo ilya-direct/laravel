@@ -3,7 +3,7 @@
 $breadcrumb = [];
 $breadcrumb[] = ['label' => 'Cтатистика посещений'];
 ?>
-@extends('layouts.main')
+@extends('admin.layouts.main')
 @section('title', 'Cтатистика посещений')
 @section('content')
     <h1>Статистика посещений</h1>

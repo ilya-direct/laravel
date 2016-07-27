@@ -46,19 +46,21 @@ Route::get('/redis', function () {
     print_r($redis->get('lar'));
 });
 
-Route::get('/stat', 'AdminController@stat');
-Route::get('/stat/page/{id}', 'AdminController@pageBlocks')->where('id', '[0-9]+');;
-Route::get('/stat/page/all', 'AdminController@pageBlocks');
-Route::get('/stat/page/all/browsers', 'AdminController@allBrowserStat');
-Route::get('/stat/page/{id}/browsers', 'AdminController@browserStat');
-Route::get('/stat/page/{id}/oses', 'AdminController@osStat');
 
-Route::get('/admin/login', 'AdminController@login');
 
 
 // Authentication Routes...
-$this->post('admin/login', 'Auth\AuthController@login');
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
-    Route::get('/', 'AdminController@home');
-    $this->get('logout', 'Auth\AuthController@logout');
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('/login', 'AdminController@login');
+    $this->post('/login', 'Auth\AuthController@login');
+    Route::group(['middleware' => 'auth'], function() {
+        Route::get('/', 'AdminController@home');
+        Route::get('logout', 'Auth\AuthController@logout');
+        Route::get('/stat', 'AdminController@stat');
+        Route::get('/stat/page/{id}', 'AdminController@pageBlocks')->where('id', '[0-9]+');;
+        Route::get('/stat/page/all', 'AdminController@pageBlocks');
+        Route::get('/stat/page/all/browsers', 'AdminController@allBrowserStat');
+        Route::get('/stat/page/{id}/browsers', 'AdminController@browserStat');
+        Route::get('/stat/page/{id}/oses', 'AdminController@osStat');
+    });
 });

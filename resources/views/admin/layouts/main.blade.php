@@ -12,12 +12,12 @@
     <nav id="w0" class="navbar-inverse navbar-fixed-top navbar" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{{ URL::to('/admin') }}">Админ-панель</a>
+                <a class="navbar-brand" href="{{ URL::to('/') }}">Админ-панель</a>
             </div>
             @if (Auth::check())
                 <div id="w0-collapse" class="collapse navbar-collapse">
                     <ul id="w1" class="navbar-nav navbar-right nav">
-                        <li class="active"><a href="{{ URL::to('/admin/logout') }}">Выйти</a></li>
+                        <li class="active"><a href="{{ URL::to('/logout') }}">Выйти</a></li>
                     </ul>
                 </div>
             @endif

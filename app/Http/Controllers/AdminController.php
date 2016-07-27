@@ -3,9 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Request;
 
 class AdminController extends Controller
 {
+
+    public function __construct()
+    {
+        $url = app()->make('url');
+        $request = app()->make('request');
+        $url->forceRootUrl($request->root() . '/admin');
+    }
 
     protected function stat()
     {
