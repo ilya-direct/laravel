@@ -53,8 +53,12 @@ Route::get('/stat/page/all/browsers', 'AdminController@allBrowserStat');
 Route::get('/stat/page/{id}/browsers', 'AdminController@browserStat');
 Route::get('/stat/page/{id}/oses', 'AdminController@osStat');
 
-Route::group(['prefix' => 'admin', 'before' => 'auth'], function() {
-   Route::get('/', 'AdminController@home');
+Route::get('/admin/login', 'AdminController@login');
+
+
+// Authentication Routes...
+$this->post('admin/login', 'Auth\AuthController@login');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+    Route::get('/', 'AdminController@home');
+    $this->get('logout', 'Auth\AuthController@logout');
 });
-
-
