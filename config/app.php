@@ -161,6 +161,9 @@ return [
         /* IDE HELPER */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+        /* Определение страны по IP */
+        PulkitJalan\GeoIP\GeoIPServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
     ],
 
     /*
@@ -206,7 +209,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'GeoIP' => PulkitJalan\GeoIP\Facades\GeoIP::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ],
 
 ];

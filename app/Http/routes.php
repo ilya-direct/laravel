@@ -11,13 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return 'dfdfdf' .   view('welcome');
-});
+/*Route::get('/', function () {
 
-Route::get('/contacts', function () {
-    return view('contacts');
-});
+    return view('index', ['title' => 'Криптография']);
+});*/
+
+/*Route::get('/page/{id}', function ($id) {
+    return view('pages/' . $id, ['id' => $id]);
+});*/
+
+Route::get('/', 'SiteController@index');
+Route::get('/page/{id}', 'SiteController@showPage');
 
 Route::get('/item/{id}', function ($id) {
     $item = App\Item::find($id);
@@ -26,7 +30,7 @@ Route::get('/item/{id}', function ($id) {
 });
 
 Route::get('/records', function () {
-    /** @var \App\Record[] $records */
+
     $records = App\Record::with('item')
         ->orderBy('id', SORT_DESC)
         ->limit(100)
@@ -38,9 +42,19 @@ Route::get('/records', function () {
 
 Route::get('/redis', function () {
     $redis = app()->make('redis');
-    $redis->set('la', 'java');
-    print_r($redis->get('la'));
+    $redis->incr('lar');
+    print_r($redis->get('lar'));
 });
 
+Route::get('/stat', 'AdminController@stat');
+Route::get('/stat/page/{id}', 'AdminController@pageBlocks')->where('id', '[0-9]+');;
+Route::get('/stat/page/all', 'AdminController@pageBlocks');
+Route::get('/stat/page/all/browsers', 'AdminController@allBrowserStat');
+Route::get('/stat/page/{id}/browsers', 'AdminController@browserStat');
+Route::get('/stat/page/{id}/oses', 'AdminController@osStat');
+
+Route::group(['prefix' => 'admin', 'before' => 'auth'], function() {
+   Route::get('/', 'AdminController@home');
+});
 
 
