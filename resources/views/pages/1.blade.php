@@ -1,10 +1,10 @@
-@extends('layouts.main')
-@section('title')
-    Задачи криптографии. Классификация криптосистем.
-@stop
+<?php
 
-@section('content')
-    <h1> {{ $id }}. Задачи криптографии. Классификация криптосистем. </h1>
+$title = 'Задачи криптографии. Классификация криптосистем.';
+
+?>
+@extends('layouts.page')
+@section('description')
     <div dir="ltr">
         <hr border="1" style="color:rgb(11,83,148)">
         <p style="text-align:center;color:rgb(11,83,148)"><b>3. ОСНОВНЫЕ ТЕРМИНЫ И ОПРЕДЕЛЕНИЯ. КЛАССИФИКАЦИЯ ШИФРОВ</b></p>
