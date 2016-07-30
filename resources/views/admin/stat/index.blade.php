@@ -7,10 +7,10 @@ $breadcrumb[] = ['label' => 'Cтатистика посещений'];
 @section('title', 'Cтатистика посещений')
 @section('content')
     <h1>Статистика посещений</h1>
-    <p class="lead"><a href="{{ URL::to('stat/page/all/') }}">По всем страницам</a></p>
-    <ul>
-        @foreach($pages as $page)
-            <li><a href="{{URL::to('stat/page/' . $page)}}">Страница {{$page}}</a></li>
+    <p class="btn-link"><a href="{{ URL::to('stat/page/all/') }}">По всем страницам</a></p>
+    <ul class="list-unstyled">
+        @foreach($pages as $id => $page)
+            <li><a href="{{ URL::to('stat/page/' . $id) }}">{{ $id }}. {{$page}}</a></li>
         @endforeach
     </ul>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Pages;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Jenssegers\Agent\Facades\Agent;
@@ -11,21 +12,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SiteController extends Controller
 {
-    protected $pages = [
-        1 => 'Задачи криптографии. Классификация криптосистем.',
-        2 => 'Криптографические атаки и их классификация. Теоритическая и практическая стойкость криптосистем.',
-        3 => 'Исторические шифры. Классификация исторических шифров. Методы анализа простой и многоалфавитной замены.',
-        4 => 'Шенноновская теория связи в секретных системах. Энтропия и избыточность. Алгебраическая и вероятностная модели шифров',
-        5 => 'Шенноновская теория связи в секретных системах. Теоретическая и практическая стойкость криптосистемы',
-        6 => 'Шенноновская теория связи в секретных системах. Расстояние единственности.',
-        7 => 'Шифры Цезаря, Виженера и их обобщения. Шифр Вернама.',
-        8 => 'Поточные шифры и их классификация. Основные понятия и определения',
-        9 => 'Регистры сдвига с линейной и нелинейной обратной связью. Периодичность и сингулярность',
-        10 => 'Линейные рекуррентные последовательности над конечным полем. Свойства периодичности.',
-        11 => 'Линейная сложность последовательности над конечным полем.',
-        12 => 'Теорема о линейной сложности инвертированной двоичной последовательности.',
-        13 => 'Использование регистров сдвига при построении криптосистем поточного шифрования.',
-    ];
 
     protected function setStat($id)
     {
@@ -105,14 +91,15 @@ class SiteController extends Controller
     {
         $this->setstat(0);
 
-        return view('index', ['pages' => $this->pages]);
+        return view('index', ['pages' => Pages::get()]);
     }
 
     public function showPage($id)
     {
-        if (isset($this->pages[$id])) {
+        $pages = Pages::get();
+        if (isset($pages[$id])) {
             $this->setstat($id);
-            return view('pages/' . $id, ['id' => $id, 'title' => $this->pages[$id]]);
+            return view('pages/' . $id, ['id' => $id, 'title' => $pages[$id]]);
         } else {
             throw new HttpException(404);
         }
