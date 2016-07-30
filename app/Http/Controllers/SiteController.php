@@ -38,7 +38,8 @@ class SiteController extends Controller
         $referer = Request::server('HTTP_REFERER');
         $referer = empty($referer) ? 'unknown' : parse_url($referer)['host'];
 
-        $city = GeoIP::getCity();
+//        $city = GeoIP::getCity();
+        $city = 'unknown';
         $city = empty($city) ? 'unknown' : $city;
 
 
@@ -48,7 +49,7 @@ class SiteController extends Controller
 
         $redis = app()->make('redis');
 
-        $redis->sAdd('pages', $id);
+//        $redis->sAdd('pages', $id);
 
         $redis->sAdd('page:' . $id . ':browsers', $browser);
         $redis->sAdd('page:' . $id . ':oses', $os);
