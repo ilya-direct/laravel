@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Админ-панель</title>
-    <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.css') }}" />
-    <link rel="stylesheet" href="{{ URL::asset('css/site.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ URL::asset('css/site.css') }}"/>
 </head>
 <body>
 <div class="wrap">

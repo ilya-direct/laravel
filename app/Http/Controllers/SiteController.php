@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Pages;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -25,8 +26,7 @@ class SiteController extends Controller
         $referer = Request::server('HTTP_REFERER');
         $referer = empty($referer) ? 'unknown' : parse_url($referer)['host'];
 
-//        $city = GeoIP::getCity();
-        $city = 'unknown';
+        $city = GeoIP::getCity();
         $city = empty($city) ? 'unknown' : $city;
 
 

@@ -10,7 +10,7 @@ $breadcrumb[] = ['label' => 'Cтатистика посещений'];
     <p class="btn-link"><a href="{{ URL::to('stat/page/all/') }}">По всем страницам</a></p>
     <ul class="list-unstyled">
         @foreach($pages as $id => $page)
-            <li><a href="{{ URL::to('stat/page/' . $id) }}">{{ $id }}. {{$page}}</a></li>
+            <li><a href="{{ URL::to('stat/page/' . $id) }}">{{ $id }}. {{ $page }}</a></li>
         @endforeach
     </ul>
 
