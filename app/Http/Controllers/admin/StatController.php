@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests;
+use App\Pages;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class StatController extends Controller
 {
@@ -10,15 +12,23 @@ class StatController extends Controller
 
     protected function stat()
     {
-        $redis = app()->make('redis');
-        $pages = $redis->sMembers('pages');
-        return view('admin/stat/index', ['pages' => $pages ?: []]);
+
+        return view('admin/stat/index', ['pages' => Pages::get()]);
     }
 
     public function pageBlocks($id = null)
     {
-        $title = is_null($id) ? 'Все страницы' : 'Страница ' . $id;
-        $id =  is_null($id) ? 'all' : $id;
+        if ($id) {
+            if (Pages::getPageById($id)) {
+                $title = Pages::getPageById($id);
+            } else {
+                throw new HttpException(404);
+            }
+        } else {
+            $title = 'Все страницы';
+            $id = 'all';
+        }
+
         return view('admin/stat/pageBlocks', [
             'title' => $title,
             'pageId' => $id,
@@ -44,6 +54,15 @@ class StatController extends Controller
 
     public function browserStat($id = null)
     {
+        if ($id) {
+            if (Pages::getPageById($id)) {
+                $title = Pages::getPageById($id);
+            } else {
+                throw new HttpException(404);
+            }
+        } else {
+            $title = 'Все страницы';
+        }
         $this->tableHeaders[0] = 'Браузер';
         $redis = app()->make('redis');
         $pageName = $id ? 'page:' . $id : 'total';
@@ -53,7 +72,7 @@ class StatController extends Controller
         return view('admin/stat/table', [
             'pageId' => $id ?: 'all',
             'title' => 'Браузеры',
-            'page' => $id ? 'Страница ' . $id : 'Все страницы',
+            'page' => $title,
             'header' => $this->tableHeaders,
             'table' => $table,
         ]);
@@ -61,6 +80,15 @@ class StatController extends Controller
 
     public function osStat($id = null)
     {
+        if ($id) {
+            if (Pages::getPageById($id)) {
+                $title = Pages::getPageById($id);
+            } else {
+                throw new HttpException(404);
+            }
+        } else {
+            $title = 'Все страницы';
+        }
         $this->tableHeaders[0] = 'Операционная система';
         $redis = app()->make('redis');
         $pageName = $id ? 'page:' . $id : 'total';
@@ -70,7 +98,7 @@ class StatController extends Controller
         return view('admin/stat/table', [
             'pageId' => $id ?: 'all',
             'title' => 'Операционные системы',
-            'page' => $id ? 'Страница ' . $id : 'Все страницы',
+            'page' => $title,
             'header' => $this->tableHeaders,
             'table' => $table,
         ]);
@@ -78,6 +106,15 @@ class StatController extends Controller
 
     public function refererStat($id = null)
     {
+        if ($id) {
+            if (Pages::getPageById($id)) {
+                $title = Pages::getPageById($id);
+            } else {
+                throw new HttpException(404);
+            }
+        } else {
+            $title = 'Все страницы';
+        }
         $this->tableHeaders[0] = 'Реферал';
         $redis = app()->make('redis');
         $pageName = $id ? 'page:' . $id : 'total';
@@ -87,7 +124,7 @@ class StatController extends Controller
         return view('admin/stat/table', [
             'pageId' => $id ?: 'all',
             'title' => 'Лиды (Рефы)',
-            'page' => $id ? 'Страница ' . $id : 'Все страницы',
+            'page' => $title,
             'header' => $this->tableHeaders,
             'table' => $table,
         ]);
@@ -95,6 +132,15 @@ class StatController extends Controller
 
     public function cityStat($id = null)
     {
+        if ($id) {
+            if (Pages::getPageById($id)) {
+                $title = Pages::getPageById($id);
+            } else {
+                throw new HttpException(404);
+            }
+        } else {
+            $title = 'Все страницы';
+        }
         $this->tableHeaders[0] = 'Город';
         $redis = app()->make('redis');
         $pageName = $id ? 'page:' . $id : 'total';
@@ -104,7 +150,7 @@ class StatController extends Controller
         return view('admin/stat/table', [
             'pageId' => $id ?: 'all',
             'title' => 'Города',
-            'page' => $id ? 'Страница ' . $id : 'Все страницы',
+            'page' => $title,
             'header' => $this->tableHeaders,
             'table' => $table,
         ]);
