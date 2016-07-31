@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Pages;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Jenssegers\Agent\Facades\Agent;
@@ -31,60 +32,38 @@ class SiteController extends Controller
 
         $ip = Request::ip();
         $sessionId = Session::getId();
-        // hits
 
-        $redis = app()->make('redis');
-
-//        $redis->sAdd('pages', $id);
-
-        $redis->sAdd('page:' . $id . ':browsers', $browser);
-        $redis->sAdd('page:' . $id . ':oses', $os);
-        $redis->sAdd('page:' . $id . ':referers', $referer);
-        $redis->sAdd('page:' . $id . ':cities', $city);
-
-        $redis->sAdd('page:' . $id . ':browser:' . $browser . ':ip' , $ip);
-        $redis->sAdd('page:' . $id . ':browser:' . $browser . ':session' , $sessionId);
-        $redis->incr('page:' . $id . ':browser:' . $browser . ':hits');
-
-        $redis->sAdd('page:' . $id . ':os:' . $os . ':ip' , $ip);
-        $redis->sAdd('page:' . $id . ':os:' . $os . ':session' , $sessionId);
-        $redis->incr('page:' . $id . ':os:' . $os . ':hits');
-
-        $redis->sAdd('page:' . $id . ':referer:' . $referer . ':ip' , $ip);
-        $redis->sAdd('page:' . $id . ':referer:' . $referer . ':session' , $sessionId);
-        $redis->incr('page:' . $id . ':referer:' . $referer . ':hits');
-
-        $redis->sAdd('page:' . $id . ':city:' . $city . ':ip' , $ip);
-        $redis->sAdd('page:' . $id . ':city:' . $city . ':session' , $sessionId);
-        $redis->incr('page:' . $id . ':city:' . $city . ':hits');
-
-        $this->setGeneralStat($browser, $os, $referer, $city, $ip, $sessionId);
+        // Статистика по странице
+        $this->setRedisStat('page:' . $id, $browser, $os, $referer, $city, $ip, $sessionId);
+        // Общая статистика
+        $this->setRedisStat('total', $browser, $os, $referer, $city, $ip, $sessionId);
     }
 
-    protected function setGeneralStat($browser, $os, $referer, $city, $ip, $sessionId)
+    protected function setRedisStat($pageName, $browser, $os, $referer, $city, $ip, $sessionId)
     {
-        $redis = app()->make('redis');
+        Redis::pipeline(function ($pipe) use ($pageName, $browser, $os, $referer, $city, $ip, $sessionId) {
+            /** @var $pipe \Redis */
+            $pipe->sAdd($pageName . ':browsers', $browser);
+            $pipe->sAdd($pageName . ':oses', $os);
+            $pipe->sAdd($pageName . ':referers', $referer);
+            $pipe->sAdd($pageName . ':cities', $city);
 
-        $redis->sAdd('total:browsers', $browser);
-        $redis->sAdd('total:oses', $os);
-        $redis->sAdd('total:referers', $referer);
-        $redis->sAdd('total:cities', $city);
+            $pipe->sAdd($pageName . ':browser:' . $browser . ':ip' , $ip);
+            $pipe->sAdd($pageName . ':browser:' . $browser . ':session' , $sessionId);
+            $pipe->incr($pageName . ':browser:' . $browser . ':hits');
 
-        $redis->sAdd('total:browser:' . $browser . ':ip' , $ip);
-        $redis->sAdd('total:browser:' . $browser . ':session' , $sessionId);
-        $redis->incr('total:browser:' . $browser . ':hits');
+            $pipe->sAdd($pageName . ':os:' . $os . ':ip' , $ip);
+            $pipe->sAdd($pageName . ':os:' . $os . ':session' , $sessionId);
+            $pipe->incr($pageName . ':os:' . $os . ':hits');
 
-        $redis->sAdd('total:os:' . $os . ':ip' , $ip);
-        $redis->sAdd('total:os:' . $os . ':session' , $sessionId);
-        $redis->incr('total:os:' . $os . ':hits');
+            $pipe->sAdd($pageName . ':referer:' . $referer . ':ip' , $ip);
+            $pipe->sAdd($pageName . ':referer:' . $referer . ':session' , $sessionId);
+            $pipe->incr($pageName . ':referer:' . $referer . ':hits');
 
-        $redis->sAdd('total:referer:' . $referer . ':ip' , $ip);
-        $redis->sAdd('total:referer:' . $referer . ':session' , $sessionId);
-        $redis->incr('total:referer:' . $referer . ':hits');
-
-        $redis->sAdd('total:city:' . $city . ':ip' , $ip);
-        $redis->sAdd('total:city:' . $city . ':session' , $sessionId);
-        $redis->incr('total:city:' . $city . ':hits');
+            $pipe->sAdd($pageName . ':city:' . $city . ':ip' , $ip);
+            $pipe->sAdd($pageName . ':city:' . $city . ':session' , $sessionId);
+            $pipe->incr($pageName . ':city:' . $city . ':hits');
+        });
     }
 
     public function index()
