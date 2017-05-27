@@ -212,5 +212,9 @@ return [
         'GeoIP' => PulkitJalan\GeoIP\Facades\GeoIP::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ],
-
+    
+    'domain' => [
+        'front' => env('HOST_FRONT', 'front'),
+        'back' => env('HOST_BACK', 'back'),
+    ],
 ];

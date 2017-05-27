@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests;
 use App\Pages;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Redis;
 
 class StatController extends Controller
 {
@@ -81,18 +82,18 @@ class StatController extends Controller
     public function osStat($id = null)
     {
         if ($id) {
-            if (Pages::getPageById($id)) {
-                $title = Pages::getPageById($id);
-            } else {
+            if (!($title = Pages::getPageById($id))) {
+                
                 throw new HttpException(404);
             }
         } else {
             $title = 'Все страницы';
         }
         $this->tableHeaders[0] = 'Операционная система';
-        $redis = app()->make('redis');
+        $redis = \App::make('redis');
         $pageName = $id ? 'page:' . $id : 'total';
-        $oses = $redis->sMembers($pageName . ':oses');
+//        $oses = $redis->sMembers($pageName . ':oses');
+        $oses = Redis::sMembers($pageName . ':oses');
         $table = $this->generateTable($pageName, 'os', $oses);
 
         return view('admin/stat/table', [
