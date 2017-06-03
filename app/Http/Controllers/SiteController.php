@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Pages;
-use Illuminate\Foundation\Application;
+
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controller as Controller;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -14,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SiteController extends Controller
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected function setStat($id)
     {

@@ -2,10 +2,10 @@
 
 
 Route::get('/login', 'Admin\SiteController@login');
-Route::post('/login', 'Auth\AuthController@login');
+Route::post('/login', 'Admin\SiteController@login');
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/', 'Admin\SiteController@home');
-    Route::get('logout', 'Auth\AuthController@logout');
+    Route::get('logout', 'Admin\SiteController@logout');
     Route::get('/stat', 'Admin\StatController@stat');
     Route::get('/stat/page/{id}', 'Admin\StatController@pageBlocks')->where('id', '[0-9]+');
     Route::get('/stat/page/all', 'Admin\StatController@pageBlocks');

@@ -67,6 +67,8 @@ class ArrayUserProvider implements UserProvider
         if ($login && isset($this->users[$login])) {
             return new GenericUser($this->users[$login]);
         }
+        
+        return null;
     }
 
     /**

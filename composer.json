@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "laravel/framework": "5.4.*",
         "predis/predis": "^1.1",
         "pulkitjalan/geoip": "2.*",
         "jenssegers/agent": "^2.3"

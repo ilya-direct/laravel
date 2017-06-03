@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests;
 use App\Pages;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Redis;

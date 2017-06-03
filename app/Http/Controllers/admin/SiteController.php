@@ -2,22 +2,39 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class SiteController extends Controller
 {
-    public function home()
-    {
-        return view('admin/home');
-    }
+    protected $redirectTo = '/';
+    protected $redirectAfterLogout = '/login';
 
     public function login()
     {
         if (Auth::check()) {
-            return redirect('/');
-        } else {
-            return view('admin/auth/login');
+            return redirect($this->redirectTo);
         }
+        
+        if (Request::isMethod('post')) {
+            $request = app('request');
+            if (Auth::attempt(['login' => $request->input('login'), 'password' => $request->input('password')])) {
+                return redirect($this->redirectTo);
+            }
+        }
+        
+        return view('admin/auth/login');
+    }
+    
+    public function logout()
+    {
+        Auth::logout();
+        
+        return redirect($this->redirectAfterLogout);
+    }
+    
+    public function home()
+    {
+        return view('admin/home');
     }
 }
