@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\NotificationEvent;
 use App\Pages;
+use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Redis;
 
@@ -12,6 +14,8 @@ class StatController extends Controller
 
     protected function stat()
     {
+        
+        event(new NotificationEvent());
 
         return view('admin/stat/index', ['pages' => Pages::get()]);
     }
@@ -64,7 +68,8 @@ class StatController extends Controller
             $title = 'Все страницы';
         }
         $this->tableHeaders[0] = 'Браузер';
-        $redis = app()->make('redis');
+        $redis = app('redis');
+        $redis = \App::make('redis');
         $pageName = $id ? 'page:' . $id : 'total';
         $browsers = $redis->sMembers($pageName . ':browsers');
         $table = $this->generateTable($pageName, 'browser', $browsers);
@@ -116,7 +121,7 @@ class StatController extends Controller
             $title = 'Все страницы';
         }
         $this->tableHeaders[0] = 'Реферал';
-        $redis = app()->make('redis');
+        $redis = app('redis');
         $pageName = $id ? 'page:' . $id : 'total';
         $referers = $redis->sMembers($pageName . ':referers');
         $table = $this->generateTable($pageName, 'referer', $referers);
