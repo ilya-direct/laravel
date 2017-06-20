@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendReminderEmailJob;
 use App\Pages;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -88,4 +89,11 @@ class SiteController extends Controller
         }
     }
 
+    
+    public function dispatchPage()
+    {
+        dispatch((new SendReminderEmailJob()));
+        return 'page loaded';
+    }
+    
 }
